@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGPA Calc — CGPA Calculator & Grade Planner</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <h1>CGPA Calc</h1>
+    <p class="tagline">Calculator &amp; grade planner for university students</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="cards" aria-label="Summary">
+    <div class="card stat">
+      <span class="label">CGPA</span>
+      <span class="value" id="cgpaValue">—</span>
+      <span class="sub" id="cgpaSub">No courses yet</span>
+    </div>
+    <div class="card stat">
+      <span class="label">Total credits</span>
+      <span class="value" id="creditsValue">0</span>
+      <span class="sub" id="pointsSub">0 grade points</span>
+    </div>
+    <div class="card stat">
+      <span class="label">Courses</span>
+      <span class="value" id="coursesValue">0</span>
+      <span class="sub">across <span id="semestersValue">0</span> semesters</span>
+    </div>
+  </section>
+
+  <section class="card" aria-label="Add course">
+    <h2>Add course</h2>
+    <form id="courseForm" novalidate>
+      <div class="form-grid">
+        <label>Course name
+          <input type="text" id="courseName" placeholder="e.g. Data Structures" maxlength="60" autocomplete="off">
+        </label>
+        <label>Credits
+          <input type="number" id="courseCredits" min="0.5" max="12" step="0.5" placeholder="3">
+        </label>
+        <label>Grade
+          <select id="courseGrade"></select>
+        </label>
+        <label>Semester
+          <input type="text" id="courseSemester" list="semesterList" placeholder="e.g. Fall 2026" maxlength="30" autocomplete="off">
+          <datalist id="semesterList"></datalist>
+        </label>
+      </div>
+      <p class="form-error" id="formError" role="alert" hidden></p>
+      <button type="submit" class="btn primary">Add course</button>
+    </form>
+  </section>
+
+  <section class="card" aria-label="Courses">
+    <div class="row-between">
+      <h2>Your courses</h2>
+      <button class="btn ghost" id="clearAllBtn" type="button">Clear all</button>
+    </div>
+    <div id="courseGroups"></div>
+    <p class="empty" id="coursesEmpty">No courses yet — add your first course above to see your CGPA.</p>
+  </section>
+
+  <section class="card" aria-label="Target planner">
+    <h2>Target planner</h2>
+    <p class="hint">Enter the CGPA you want and how many credits you still have to take. We'll tell you the average grade point you need from here on.</p>
+    <div class="form-grid">
+      <label>Target CGPA
+        <input type="number" id="targetCgpa" min="0" max="4" step="0.01" placeholder="3.50">
+      </label>
+      <label>Remaining credits
+        <input type="number" id="remainingCredits" min="0.5" max="200" step="0.5" placeholder="30">
+      </label>
+    </div>
+    <p class="form-error" id="plannerError" role="alert" hidden></p>
+    <div id="plannerResult" class="planner-result" hidden>
+      <div class="planner-num"><span id="requiredGp">—</span><small>avg. grade point needed</small></div>
+      <p id="plannerNote" class="hint"></p>
+    </div>
+  </section>
+
+  <section class="card" aria-label="Grade scale">
+    <div class="row-between">
+      <h2>Grade scale</h2>
+      <button class="btn ghost" id="resetScaleBtn" type="button">Reset to default</button>
+    </div>
+    <p class="hint">Points are editable — your university's scale may differ. Changes recalculate everything instantly.</p>
+    <div id="scaleEditor" class="scale-grid"></div>
+  </section>
+
+  <section class="card" aria-label="Data">
+    <h2>Your data</h2>
+    <p class="hint">Everything is stored only in this browser. Export a backup file before switching devices.</p>
+    <div class="btn-row">
+      <button class="btn" id="exportBtn" type="button">Export JSON</button>
+      <button class="btn" id="importBtn" type="button">Import JSON</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </div>
+    <p class="form-error" id="dataError" role="alert" hidden></p>
+    <p class="ok-msg" id="dataOk" role="status" hidden></p>
+  </section>
+</main>
+
+<div class="modal-backdrop" id="whatifBackdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="whatifTitle">
+    <h2 id="whatifTitle">What-if grade change</h2>
+    <p class="hint" id="whatifCourse"></p>
+    <label>Try grade
+      <select id="whatifGrade"></select>
+    </label>
+    <div class="whatif-result">
+      <div><span class="label">Current CGPA</span><span class="value" id="whatifCurrent">—</span></div>
+      <div><span class="label">Projected CGPA</span><span class="value" id="whatifProjected">—</span></div>
+      <div><span class="label">Change</span><span class="value" id="whatifDelta">—</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" id="whatifApply" type="button">Apply grade</button>
+      <button class="btn" id="whatifCancel" type="button">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<footer class="wrap footer">
+  <p>CGPA Calc runs fully offline. Your data never leaves this browser.</p>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
